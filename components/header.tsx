@@ -1,18 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { createClient } from "@/lib/supabase/client"
+import { logout, type User } from "@/lib/auth/azure-swa-auth"
 import { LogOut, Film } from "lucide-react"
 import { useRouter } from "next/navigation"
-import type { User } from "@supabase/supabase-js"
 
 export function Header({ user }: { user: User }) {
   const router = useRouter()
-  const supabase = createClient()
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.push("/auth/login")
+  const handleLogout = () => {
+    logout()
   }
 
   return (

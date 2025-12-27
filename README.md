@@ -1,30 +1,89 @@
-# Movie list by mood
+# Fliek Kyklys - Movie List by Mood
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A Next.js application for organizing movies by mood, deployed on Azure Static Web Apps.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/justaghosts-projects/v0-movie-list-by-mood)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/urGLhVtF3uI)
+[![Deployed on Azure](https://img.shields.io/badge/Deployed%20on-Azure%20Static%20Web%20Apps-blue?style=for-the-badge&logo=microsoft-azure)](https://azure.microsoft.com/services/app-service/static/)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+This application helps users discover and track movies organized by different moods. With 240 films categorized across 12 different moods, users can easily find the perfect movie for any occasion.
 
-## Deployment
+## Features
 
-Your project is live at:
+- **Track Watched Movies**: Mark films as watched and maintain a complete viewing history
+- **Rate Movies**: Give up to 5 stars and remember your favorites
+- **Add Comments**: Write your thoughts and share your opinions about each film
+- **12 Different Moods**: From light and cheerful to action and drama - there's a mood for every day
+- **User-Friendly Design**: Designed with large buttons and clear text for easy use
 
-**[https://vercel.com/justaghosts-projects/v0-movie-list-by-mood](https://vercel.com/justaghosts-projects/v0-movie-list-by-mood)**
+## Azure Deployment
 
-## Build your app
+### Resource Group
+- **Name**: `nl-dev-movienametbd-rg-san`
+- **Region**: North Europe
 
-Continue building your app on:
+### CI/CD Pipeline
 
-**[https://v0.app/chat/urGLhVtF3uI](https://v0.app/chat/urGLhVtF3uI)**
+This project uses GitHub Actions for continuous deployment to Azure Static Web Apps. The workflow automatically:
 
-## How It Works
+1. Builds the Next.js application on every push to `main`
+2. Runs build validation on pull requests
+3. Deploys to Azure Static Web Apps using static export
+4. Creates preview environments for pull requests
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Required Secrets
+
+Configure the following secrets in your GitHub repository:
+
+- `AZURE_STATIC_WEB_APPS_API_TOKEN`: Azure Static Web Apps deployment token
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
+
+### Local Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Run linter
+pnpm lint
+```
+
+## Technology Stack
+
+- **Framework**: Next.js 16
+- **UI Components**: Radix UI
+- **Styling**: Tailwind CSS
+- **Database**: Supabase
+- **Deployment**: Azure Static Web Apps
+- **CI/CD**: GitHub Actions
+
+## Project Structure
+
+```
+├── app/              # Next.js app directory
+├── components/       # Reusable React components
+├── lib/             # Utility functions and helpers
+├── public/          # Static assets
+├── styles/          # Global styles
+└── types/           # TypeScript type definitions
+```
+
+## Contributing
+
+This project is automatically synced with deployments. To contribute:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is private and proprietary.

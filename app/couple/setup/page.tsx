@@ -1,28 +1,50 @@
-import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
+'use client'
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { getUser } from "@/lib/auth/azure-swa-auth"
+import { getCoupleProfile } from "@/lib/storage/localStorage"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Heart } from "lucide-react"
 import Link from "next/link"
 
-export default async function CoupleSetupPage() {
-  const supabase = await createClient()
-  
-  const { data: { user }, error } = await supabase.auth.getUser()
-  
-  if (error || !user) {
-    redirect("/auth/login")
-  }
+export default function CoupleSetupPage() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasCouple, setHasCouple] = useState(false)
+  const router = useRouter()
 
-  // Check if user already has a couple profile
-  const { data: existingCouple } = await supabase
-    .from("couples")
-    .select("*")
-    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
-    .single()
+  useEffect(() => {
+    async function checkAuth() {
+      const { isAuthenticated } = await getUser()
+      
+      if (!isAuthenticated) {
+        window.location.href = '/login'
+        return
+      }
 
-  if (existingCouple) {
-    redirect("/couple/dashboard")
+      // Check if user already has a couple profile
+      const existingCouple = getCoupleProfile()
+      if (existingCouple) {
+        router.push("/couple/dashboard")
+        return
+      }
+
+      setIsLoading(false)
+    }
+    
+    checkAuth()
+  }, [router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

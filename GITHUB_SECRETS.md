@@ -1,6 +1,6 @@
-# Required GitHub Secrets Configuration
+# Required GitHub Secrets Configuration (Updated - No Supabase!)
 
-Before the Azure Static Web Apps deployment can work, you need to configure the following secrets in your GitHub repository.
+The app now uses Azure Static Web Apps built-in authentication and local storage. Supabase has been removed!
 
 ## How to Add Secrets
 
@@ -8,7 +8,7 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 2. Click "New repository secret"
 3. Add each secret below
 
-## Required Secrets
+## Required Secrets (5 total - Down from 8!)
 
 ### 1. AZURE_STATIC_WEB_APPS_API_TOKEN
 
@@ -22,39 +22,7 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 ---
 
-### 2. NEXT_PUBLIC_SUPABASE_URL
-
-**Source:** Supabase project dashboard
-
-**How to get it:**
-1. Go to your Supabase project dashboard
-2. Click on "Settings" (gear icon)
-3. Go to "API" section
-4. Copy the "Project URL"
-
-**Format:** `https://[project-id].supabase.co`
-
-**Example:** `https://xyzabc123def.supabase.co`
-
----
-
-### 3. NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-**Source:** Supabase project dashboard
-
-**How to get it:**
-1. Go to your Supabase project dashboard
-2. Click on "Settings" (gear icon)
-3. Go to "API" section
-4. Copy the "anon" / "public" key (under "Project API keys")
-
-**Format:** Long JWT token starting with `eyJ...`
-
-**Example:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-
----
-
-### 4. AZURE_OPENAI_ENDPOINT
+### 2. AZURE_OPENAI_ENDPOINT
 
 **Source:** Azure AI Foundry portal
 
@@ -66,11 +34,9 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 **Format:** `https://[your-foundry].openai.azure.com/`
 
-**Example:** `https://my-foundry-instance.openai.azure.com/`
-
 ---
 
-### 5. AZURE_OPENAI_API_KEY
+### 3. AZURE_OPENAI_API_KEY
 
 **Source:** Azure AI Foundry portal
 
@@ -83,11 +49,9 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 **Format:** Long alphanumeric string (32+ characters)
 
-**Example:** `a1b2c3d4e5f6g7h8i9j0...`
-
 ---
 
-### 6. AZURE_OPENAI_DEPLOYMENT_NAME
+### 4. AZURE_OPENAI_DEPLOYMENT_NAME
 
 **Source:** Azure AI Foundry portal
 
@@ -104,19 +68,7 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 ---
 
-### 7. AZURE_OPENAI_API_VERSION (Optional)
-
-**Source:** Azure OpenAI API documentation
-
-**Default value:** `2024-11-20`
-
-**Format:** Date string (YYYY-MM-DD)
-
-**Note:** Only change if Azure recommends a different API version
-
----
-
-### 8. TMDB_API_KEY
+### 5. TMDB_API_KEY
 
 **Source:** The Movie Database (TMDB) API
 
@@ -129,37 +81,34 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 **Format:** 32-character hexadecimal string
 
-**Example:** `a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`
+---
+
+## What Changed?
+
+### ❌ Removed (No Longer Needed):
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase database removed
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase auth removed
+- `AZURE_OPENAI_API_VERSION` - Optional, uses default now
+
+### ✅ Authentication Now Uses:
+**Azure Static Web Apps Built-in Authentication**
+- Free, secure, supports GitHub/Google/Twitter/Azure AD
+- No configuration needed (works automatically)
+
+### ✅ Data Storage Now Uses:
+**Browser LocalStorage**
+- Keeps data on the device
+- Perfect for 2-3 users
+- No database costs
+- Privacy-friendly (data never leaves the device)
 
 ---
 
-## Verification
+## Benefits of Removing Supabase
 
-After adding all secrets:
-
-1. Go to the "Actions" tab in your repository
-2. The workflow should automatically run on the next push to `main`
-3. Check the workflow logs to ensure the secrets are being used correctly
-4. If you see errors about missing environment variables, double-check the secret names match exactly
-
-## Security Notes
-
-- Never commit these secrets to your repository
-- The `.env.example` file is for reference only - actual values should only be in GitHub Secrets
-- The `NEXT_PUBLIC_` prefix means these values will be included in the client-side bundle
-- Keep your Supabase keys secure and rotate them if compromised
-
-## Testing Locally
-
-To test locally without GitHub Actions:
-
-1. Create a `.env.local` file in the project root (this is gitignored)
-2. Add the environment variables:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-3. Run `pnpm dev` to start the development server
-4. The app will automatically use these environment variables
+✅ **Simpler** - No database setup required  
+✅ **Cheaper** - $0 monthly cost  
+✅ **Faster** - Everything loads from CDN  
+✅ **More Private** - Data stays on user's device  
+✅ **Fewer Secrets** - 5 secrets instead of 8  
+✅ **Production Ready** - Works immediately after deployment

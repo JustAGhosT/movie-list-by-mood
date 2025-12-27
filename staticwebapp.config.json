@@ -1,24 +1,41 @@
 {
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/images/*.{png,jpg,gif,ico,svg}", "/css/*", "/_next/*", "/api/*"]
-  },
-  "platform": {
-    "apiRuntime": "node:18"
-  },
   "routes": [
+    {
+      "route": "/login",
+      "redirect": "/.auth/login/github"
+    },
+    {
+      "route": "/logout",
+      "redirect": "/.auth/logout"
+    },
+    {
+      "route": "/app/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/couple/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": ["authenticated"]
+    },
     {
       "route": "/_next/static/*",
       "headers": {
         "cache-control": "public, max-age=31536000, immutable"
       }
-    },
-    {
-      "route": "/api/*",
-      "allowedRoles": ["anonymous", "authenticated"]
     }
   ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*.{png,jpg,gif,ico,svg}", "/css/*", "/_next/*"]
+  },
   "responseOverrides": {
+    "401": {
+      "redirect": "/login",
+      "statusCode": 302
+    },
     "404": {
       "rewrite": "/index.html",
       "statusCode": 200
@@ -27,7 +44,10 @@
   "globalHeaders": {
     "content-security-policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:",
     "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
+    "X-Frame-Options": "SAMEORIGIN",
     "X-XSS-Protection": "1; mode=block"
+  },
+  "platform": {
+    "apiRuntime": "node:18"
   }
 }

@@ -54,6 +54,85 @@ Before the Azure Static Web Apps deployment can work, you need to configure the 
 
 ---
 
+### 4. AZURE_OPENAI_ENDPOINT
+
+**Source:** Azure AI Foundry portal
+
+**How to get it:**
+1. Go to Azure AI Foundry: `mys-shared-ai-san-project`
+2. Navigate to "Models" → "Deployments"
+3. Select your deployment (e.g., `gpt-4o`)
+4. Copy the endpoint URL
+
+**Format:** `https://[your-foundry].openai.azure.com/`
+
+**Example:** `https://my-foundry-instance.openai.azure.com/`
+
+---
+
+### 5. AZURE_OPENAI_API_KEY
+
+**Source:** Azure AI Foundry portal
+
+**How to get it:**
+1. Go to Azure AI Foundry: `mys-shared-ai-san-project`
+2. Navigate to "Models" → "Deployments"
+3. Click on your deployment
+4. Go to "Keys and Endpoint" section
+5. Copy "Key 1" or "Key 2"
+
+**Format:** Long alphanumeric string (32+ characters)
+
+**Example:** `a1b2c3d4e5f6g7h8i9j0...`
+
+---
+
+### 6. AZURE_OPENAI_DEPLOYMENT_NAME
+
+**Source:** Azure AI Foundry portal
+
+**How to get it:**
+1. Go to Azure AI Foundry: `mys-shared-ai-san-project`
+2. Navigate to "Models" → "Deployments"
+3. Copy the deployment name from the list
+
+**Format:** Model deployment name
+
+**Example:** `gpt-4o` or `gpt-4.1`
+
+**Available options:** `gpt-4o`, `gpt-4.1`, `o3`, `o3-mini`, `o4-mini`, `gpt-4o-mini`
+
+---
+
+### 7. AZURE_OPENAI_API_VERSION (Optional)
+
+**Source:** Azure OpenAI API documentation
+
+**Default value:** `2024-11-20`
+
+**Format:** Date string (YYYY-MM-DD)
+
+**Note:** Only change if Azure recommends a different API version
+
+---
+
+### 8. TMDB_API_KEY
+
+**Source:** The Movie Database (TMDB) API
+
+**How to get it:**
+1. Create a free account at [themoviedb.org](https://www.themoviedb.org/)
+2. Go to Settings → API
+3. Request an API key (choose "Developer" option)
+4. Fill in the application form
+5. Copy your API key (v3 auth)
+
+**Format:** 32-character hexadecimal string
+
+**Example:** `a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6`
+
+---
+
 ## Verification
 
 After adding all secrets:

@@ -4,8 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Check, Star, MessageSquare, FileEdit } from "lucide-react"
 import { useState } from "react"
-import { createClient } from "@/lib/supabase/client"
-import type { MovieWithUserData } from "@/types/database"
+import type { MovieWithUserData } from "@/lib/cosmos/movies"
 import { MovieDialog } from "@/components/movie-dialog"
 
 export function MovieCard({
@@ -15,36 +14,31 @@ export function MovieCard({
   movie: MovieWithUserData
   userId: string
 }) {
-  const userMovie = movie.user_movies?.[0]
+  const userMovie = movie.userMovie
   const [watched, setWatched] = useState(userMovie?.watched || false)
   const [rating, setRating] = useState(userMovie?.rating || 0)
   const [isLoading, setIsLoading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
-
-  const supabase = createClient()
 
   const handleWatchedToggle = async () => {
     setIsLoading(true)
     try {
       const newWatched = !watched
 
-      if (userMovie) {
-        await supabase
-          .from("user_movies")
-          .update({ watched: newWatched, updated_at: new Date().toISOString() })
-          .eq("id", userMovie.id)
-      } else {
-        await supabase.from("user_movies").insert({
-          user_id: userId,
-          movie_id: movie.id,
+      await fetch("/api/user-movies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          movieId: movie.id,
           watched: newWatched,
-        })
-      }
+        }),
+      })
 
       setWatched(newWatched)
       window.location.reload()
     } catch (error) {
-      console.error("[v0] Error toggling watched:", error)
+      console.error("Error toggling watched:", error)
     } finally {
       setIsLoading(false)
     }
@@ -55,24 +49,20 @@ export function MovieCard({
     try {
       const ratingValue = rating === newRating ? null : newRating
 
-      if (userMovie) {
-        await supabase
-          .from("user_movies")
-          .update({ rating: ratingValue, updated_at: new Date().toISOString() })
-          .eq("id", userMovie.id)
-      } else {
-        await supabase.from("user_movies").insert({
-          user_id: userId,
-          movie_id: movie.id,
+      await fetch("/api/user-movies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          movieId: movie.id,
           rating: ratingValue,
-          watched: false,
-        })
-      }
+        }),
+      })
 
       setRating(ratingValue || 0)
       window.location.reload()
     } catch (error) {
-      console.error("[v0] Error updating rating:", error)
+      console.error("Error updating rating:", error)
     } finally {
       setIsLoading(false)
     }
@@ -130,28 +120,16 @@ export function MovieCard({
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)} className="flex-1 gap-2">
                 <MessageSquare className="h-4 w-4" />
-                {userMovie?.user_comment ? "Wysig Kommentaar" : "Voeg Kommentaar by"}
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)} className="flex-1 gap-2">
-                <FileEdit className="h-4 w-4" />
-                {userMovie?.admin_note ? "Wysig Nota" : "Voeg Nota by"}
+                {userMovie?.comment ? "Wysig Kommentaar" : "Voeg Kommentaar by"}
               </Button>
             </div>
 
-            {(userMovie?.user_comment || userMovie?.admin_note) && (
+            {userMovie?.comment && (
               <div className="space-y-2 text-sm pt-2 border-t">
-                {userMovie?.user_comment && (
-                  <div>
-                    <p className="font-medium text-xs text-muted-foreground mb-1">Kommentaar</p>
-                    <p className="leading-relaxed">{userMovie.user_comment}</p>
-                  </div>
-                )}
-                {userMovie?.admin_note && (
-                  <div>
-                    <p className="font-medium text-xs text-muted-foreground mb-1">Nota</p>
-                    <p className="leading-relaxed italic text-muted-foreground">{userMovie.admin_note}</p>
-                  </div>
-                )}
+                <div>
+                  <p className="font-medium text-xs text-muted-foreground mb-1">Kommentaar</p>
+                  <p className="leading-relaxed">{userMovie.comment}</p>
+                </div>
               </div>
             )}
           </div>

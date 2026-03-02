@@ -1,8 +1,25 @@
+'use client'
+
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Film, Star, MessageSquare, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { getUser } from "@/lib/auth/azure-swa-auth"
+import { useRouter } from "next/navigation"
 
 export default function HomePage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    async function checkAuth() {
+      const { isAuthenticated } = await getUser()
+      if (isAuthenticated) {
+        router.push("/app")
+      }
+    }
+    checkAuth()
+  }, [router])
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -18,10 +35,10 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg h-14 px-8">
-              <Link href="/auth/login">Begin Kyk</Link>
+              <Link href="/login">Begin Kyk</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg h-14 px-8 bg-transparent">
-              <Link href="/auth/sign-up">Skep Rekening</Link>
+              <Link href="/login">Teken Aan</Link>
             </Button>
           </div>
         </div>
@@ -49,7 +66,7 @@ export default function HomePage() {
               <div>
                 <h3 className="font-semibold text-lg mb-2">Gradeer Flieks</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Gee tot 5 sterre en onthou watter flieks jou gunstelinge is.
+                  Gee tot 10 sterre en onthou watter flieks jou gunstelinge is.
                 </p>
               </div>
             </div>
@@ -61,9 +78,9 @@ export default function HomePage() {
                 <MessageSquare className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Voeg Kommentaar by</h3>
+                <h3 className="font-semibold text-lg mb-2">AI Aanbevelings</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Skryf wat jy van die fliek gedink het en deel jou gedagtes.
+                  Kry slim aanbevelings gebaseer op jou en jou partner se smaak.
                 </p>
               </div>
             </div>
@@ -90,7 +107,7 @@ export default function HomePage() {
             Ontwerp met groot knoppies en duidelike teks vir maklike gebruik. Perfek vir enige ouderdom.
           </p>
           <Button asChild size="lg" className="text-lg h-14 px-8">
-            <Link href="/auth/sign-up">Kom ons Begin</Link>
+            <Link href="/login">Kom ons Begin</Link>
           </Button>
         </div>
       </div>
